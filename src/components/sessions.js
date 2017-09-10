@@ -1,12 +1,13 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { login } from '../actions/userActions';
-import { Form } from 'semantic-ui-react'
+import { login, logout } from '../actions/userActions';
+import { Form, Button } from 'semantic-ui-react'
+import { Route, Redirect} from 'react-router';
 
 
 
-class Login extends React.Component{
+class Sessions extends React.Component{
   constructor(props){
     super(props)
     this.state = {
@@ -23,7 +24,8 @@ class Login extends React.Component{
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.login(this.state)
+    this.props.login(this.state).then(resp => {console.log("test", this.context.router)})
+    // this.props.history.push('/userspage')
   }
 
   logginForm = () => {
@@ -38,10 +40,30 @@ class Login extends React.Component{
     )
   }
 
+  logout = () => {
+    this.props.logout()
+  }
+
+  logoutButton = () => {
+    return (
+      <Form>
+        <Button onClick={this.logout}>Logout</Button>
+      </Form>
+    )
+  }
+
+  whatToRender = () => {
+    if (localStorage.the_key_to_happiness !== "null") {
+      return this.logoutButton()
+    } else {
+      return this.logginForm()
+    }
+  }
+
 
   render(){
     return(
-      this.logginForm()
+      this.whatToRender()
     )
   }
 }
@@ -49,18 +71,15 @@ class Login extends React.Component{
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    login: login
+    login: login,
+    logout: logout
  }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(Login);
-
-
-
-function find() {
-  let current;
-  let next;
-
-
-
+const mapStateToProps = (state) => {
+  return {
+  userID: state.user.userID
+  }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sessions);

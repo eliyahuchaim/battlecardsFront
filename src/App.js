@@ -4,7 +4,7 @@ import logo from './logo.svg';
 import './App.css';
 import { bindActionCreators } from 'redux';
 import SignUpForm from './components/signupForm'
-import { seedUsers } from './actions/userActions'
+import { seedUsers, getUserId } from './actions/userActions'
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import NavBar from './components/nav';
 import UserPage from './components/userPage';
@@ -15,11 +15,16 @@ import {seedAllCardTypes} from './actions/cardTypesActions';
 import VehicleCards from './components/vehicleCards';
 import ClassCards from './components/classCards';
 import CreateCharacter from './components/createCharacter';
-import Login from './components/sessions'
+import Sessions from './components/sessions'
+import CharacterDetail from './components/characterDetail';
 
 class App extends Component {
   constructor(props){
     super(props)
+  }
+
+  componentWillMount(){
+    if (localStorage.the_key_to_happiness !== "null") {console.log("local storage exists"), this.props.getUserId()}
   }
 
   componentDidMount(){
@@ -35,8 +40,9 @@ class App extends Component {
       <Router>
         <div className="App">
           <NavBar />
-          <Login />
+          <Sessions />
             <img src={logo} className="App-logo" alt="logo" />
+            <Route exact path='/characters/:id' render={ (props) => <CharacterDetail history={props.history} match={props.match}/>} />
             <Route exact path='/createcharacter' component={CreateCharacter} />
             <Route exact path='/classcards' component={ClassCards} />
             <Route exact path='/home' component={Home} />
@@ -55,7 +61,8 @@ class App extends Component {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     seedUsers: seedUsers,
-    seedCardTypes: seedAllCardTypes
+    seedCardTypes: seedAllCardTypes,
+    getUserId: getUserId
   }, dispatch );
 };
 

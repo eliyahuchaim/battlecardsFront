@@ -5,7 +5,6 @@ export default class UserApi {
 
 
   static createUser(userInfo){
-    // debugger
     const data = {user: {
       name: userInfo.name,
       bf1_username: userInfo.bf1_username,
@@ -49,6 +48,23 @@ export default class UserApi {
       },
       method: 'POST',
       body: JSON.stringify(user_info)
+    })
+    .then(resp => resp.json())
+  }
+
+  static currentUserData(id){
+    return fetch(`http://localhost:3000/api/v1/users/${id}`)
+    .then(resp => resp.json())
+  }
+
+  static retrieveUserId(){
+    return fetch('http://localhost:3000/api/v1/userid', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.the_key_to_happiness}`,
+        'accept': 'application/json',
+        'content-type': 'application/json'
+      },
+      method: 'GET'
     })
     .then(resp => resp.json())
   }

@@ -3,11 +3,24 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Card, Grid, Image, Button, Icon } from 'semantic-ui-react';
 import VehicleCardDetail from './vehicleCardDetails';
+import { getSingleUserByID, getCurrentUserDate } from '../actions/userActions';
 
 
 class VehicleCards extends React.Component{
   constructor(props){
     super(props)
+  }
+
+  componentDidMount(){
+    if (typeof(this.props.userID) === "number") {
+      this.props.getCurrentUserDate(this.props.userID)
+      }
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (typeof(this.props.userID) === "string" && typeof(nextProps.userID) === "number" ){
+      this.props.getCurrentUserDate(nextProps.userID)
+    }
   }
 
 
@@ -19,16 +32,24 @@ class VehicleCards extends React.Component{
   }
 
   renderAllVehicles = () => {
-    return this.props.singleUser.vehicles.map((vehicle,index) => {
+    return this.props.currentUser.vehicles.map((vehicle,index) => {
       return <VehicleCardDetail vehicle={vehicle} key={index} />
     })
+  }
+
+  shouldRender = () => {
+    if (this.props.currentUser.vehicles) {
+      return this.orderByKills()
+    } else {
+      return null
+    }
   }
 
   render(){
     // debugger
     return(
       <Card.Group>
-        {this.orderByKills()}
+        {this.shouldRender()}
       </Card.Group>
     )
   }
@@ -39,8 +60,15 @@ const mapStateToProps = (state) =>{
   return {
     currentUser: state.user.currentUser,
     singleUser: state.user.singleUser,
-    vehicleCardTypes: state.cardTypes.vehicleCardTypes
+    vehicleCardTypes: state.cardTypes.vehicleCardTypes,
+    userID: state.user.userID
   }
 }
 
-export default connect(mapStateToProps, null)(VehicleCards)
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    getCurrentUserDate: getCurrentUserDate
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(VehicleCards)

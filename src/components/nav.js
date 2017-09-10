@@ -16,66 +16,80 @@ const link = {
 
 
 const NavBar = () => {
-  return(
-    <div className='nav-in'>
-      <NavLink
-        to='/home'
-        exact
-        style={link}
-        activeStyle={{
-        background: '#2a65b2'}}
-      >Home</NavLink>
+  if (localStorage["the_key_to_happiness"] !== "null") {
+    return(
+      <div className='nav-in'>
         <NavLink
-          to='/characters'
+          to='/home'
           exact
           style={link}
           activeStyle={{
           background: '#2a65b2'}}
-        >Characters</NavLink>
+        >Home</NavLink>
           <NavLink
-            to='/userspage'
+            to='/characters'
             exact
             style={link}
             activeStyle={{
             background: '#2a65b2'}}
-          >My Page</NavLink>
-          <NavLink
-            to='/signup'
-            exact
-            style={link}
-            activeStyle={{
-            background: '#2a65b2'}}
-          >SignUp</NavLink>
-          <NavLink
-            to='/weapons'
-            exact
-            style={link}
-            activeStyle={{
-            background: '#2a65b2'}}
-          >Weapon Cards</NavLink>
-          <NavLink
-            to='/vehiclecards'
-            exact
-            style={link}
-            activeStyle={{
-            background: '#2a65b2'}}
-          >Vehicle Cards</NavLink>
-          <NavLink
-            to='/classcards'
-            exact
-            style={link}
-            activeStyle={{
-            background: '#2a65b2'}}
-          >Class Cards</NavLink>
-          <NavLink
-            to='/createcharacter'
-            exact
-            style={link}
-            activeStyle={{
-            background: '#2a65b2'}}
-          >Create Character</NavLink>
-    </div>
-  )
-}
+          >Characters</NavLink>
+            <NavLink
+              to='/userspage'
+              exact
+              style={link}
+              activeStyle={{
+              background: '#2a65b2'}}
+            >My Page</NavLink>
+            <NavLink
+              to='/weapons'
+              exact
+              style={link}
+              activeStyle={{
+              background: '#2a65b2'}}
+            >Weapon Cards</NavLink>
+            <NavLink
+              to='/vehiclecards'
+              exact
+              style={link}
+              activeStyle={{
+              background: '#2a65b2'}}
+            >Vehicle Cards</NavLink>
+            <NavLink
+              to='/classcards'
+              exact
+              style={link}
+              activeStyle={{
+              background: '#2a65b2'}}
+            >Class Cards</NavLink>
+            <NavLink
+              to='/createcharacter'
+              exact
+              style={link}
+              activeStyle={{
+              background: '#2a65b2'}}
+            >Create Character</NavLink>
+      </div>
+    )
+  } else {
+    return (
+      <div className='nav-in'>
+        <NavLink
+          to='/home'
+          exact
+          style={link}
+          activeStyle={{
+          background: '#2a65b2'}}
+        >Home</NavLink>
+        <NavLink
+          to='/signup'
+          exact
+          style={link}
+          activeStyle={{
+          background: '#2a65b2'}}
+        >SignUp</NavLink>
+      </div>
+    )
+  }
+};
 
 export default NavBar;

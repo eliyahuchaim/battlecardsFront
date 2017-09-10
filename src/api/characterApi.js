@@ -16,9 +16,10 @@ export default class CharacterApi {
       class_card: characterInfo.classID
       }
     }
-    debugger
+    // debugger
     return fetch(URL, {
       headers: {
+        'Authorization': `Bearer ${localStorage.the_key_to_happiness}`,
         'accept': 'application/json',
         'content-type': 'application/json'
       },

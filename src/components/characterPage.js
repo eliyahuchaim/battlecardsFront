@@ -4,12 +4,34 @@ import { connect } from 'react-redux';
 import {getUserCharacters} from '../actions/userActions';
 import characterDetail from './characterDetail';
 import {Card, Grid, Image, Button, Table, Icon } from 'semantic-ui-react';
+import { Route, Redirect} from 'react-router';
 
 
 class CharacterPage extends React.Component{
     constructor(props){
       super(props)
+      this.state = {
+        showDetails: false
+      };
     }
+
+    componentDidMount(){
+      if (typeof(this.props.userID) === "number") {
+        this.props.getUserCharacters(this.props.userID)
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+      if (typeof(this.props.userID) === "string" && typeof(nextProps.userID) === "number" ){
+        this.props.getUserCharacters(nextProps.userID)
+      }
+    }
+
+    goToDetailPage = (e) => {
+      this.props.history.push(`/characters/${e.target.id}`)
+    }
+
+
 
 
   createBasicCharacterCards = () => {
@@ -44,7 +66,7 @@ class CharacterPage extends React.Component{
             </Card.Description>
           </Card.Content>
           <Card.Content extra>
-            <Button>
+            <Button onClick={this.goToDetailPage} id={character.info[0].id} >
             View This Character
             </Button>
           </Card.Content>
@@ -57,12 +79,10 @@ class CharacterPage extends React.Component{
 
 
 
-  componentDidMount(){
-    this.props.getUserCharacters(this.props.userID)
-  }
+
 
   renderCharacters = () => {
-    if (this.props.currentUserCharacters.characters) {
+    // if (this.props.currentUserCharacters.characters) {
       let charactersJSX = this.createBasicCharacterCards()
       return (
         <Grid>
@@ -90,20 +110,21 @@ class CharacterPage extends React.Component{
           </Grid.Row>
         </Grid>
       )
-    } else {
-      return (
-        null
-      )
-    }
   };
 
-
+  shouldRender = () => {
+    if (this.props.currentUserCharacters.characters && this.state.showDetails === false) {
+      return this.renderCharacters()
+    } else {
+      return null
+    }
+  }
 
 
   render(){
     return(
       <div>
-        {this.renderCharacters()}
+        {this.shouldRender()}
       </div>
     )
   }

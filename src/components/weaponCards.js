@@ -2,7 +2,8 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Card, Grid, Image, Button, Icon } from 'semantic-ui-react';
-import WeaponCardDetail from './weaponCardDetails'
+import WeaponCardDetail from './weaponCardDetails';
+import { getSingleUserByID, getCurrentUserDate } from '../actions/userActions';
 
 
 
@@ -15,9 +16,21 @@ class WeaponCards extends React.Component{
   }
 
 
+  componentDidMount(){
+    if (typeof(this.props.userID) === "number") {
+      this.props.getCurrentUserDate(this.props.userID)
+      }
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (typeof(this.props.userID) === "string" && typeof(nextProps.userID) === "number" ){
+      this.props.getCurrentUserDate(nextProps.userID)
+    }
+  }
+
+
   renderAllWeaponCards = () => {
     let weapons = this.orderByKills()
-    // let weaponsJSX =  this.props.singleUser.weapons
 
     let orderedByKills = weapons.map((weapon, index) => {
       return <WeaponCardDetail weaponCard={weapon} key={index} />
@@ -26,13 +39,13 @@ class WeaponCards extends React.Component{
   }
 
   orderByKills = () => {
-    return this.props.singleUser.weapons.sort((a,b) => {
+    return this.props.currentUser.weapons.sort((a,b) => {
       return b.kills - a.kills
     })
   }
 
   topTenWeapons = () => {
-    let jsx = this.props.singleUser.weapons.sort((a,b) => {
+    let jsx = this.props.currentUser.weapons.sort((a,b) => {
       return b.kills - a.kills
     })
 
@@ -120,6 +133,14 @@ class WeaponCards extends React.Component{
     }
   }
 
+  shouldRender = () => {
+    if (this.props.currentUser.weapons) {
+      return this.typeOfRender()
+    } else {
+      return null
+    }
+  }
+
 
   render(){
     console.log("in weapons card", this.props)
@@ -129,7 +150,7 @@ class WeaponCards extends React.Component{
         {this.typeOfButton()}
         </Button>
         <Card.Group>
-          {this.typeOfRender()}
+          {this.shouldRender()}
         </Card.Group>
       </div>
     )
@@ -141,15 +162,16 @@ const mapStateToProps = (state) => {
   return {
     currentUser: state.user.currentUser,
     singleUser: state.user.singleUser,
+    userID: state.user.userID,
     weaponCardTypes: state.cardTypes.weaponCardTypes
   }
 };
 
 
-// const mapDispatchToProps = (dispatch) => {
-//   return bindActionCreators({
-//
-//   }, dispatch);
-// }
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    getCurrentUserDate: getCurrentUserDate
+  }, dispatch);
+}
 
-export default connect(mapStateToProps,null)(WeaponCards)
+export default connect(mapStateToProps,mapDispatchToProps)(WeaponCards)

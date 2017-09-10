@@ -1,6 +1,6 @@
 import {add_user} from '../actions/userActions'
 
-export default function usersReducer(state = {loading: false, userID: 3, currentUser: {}, topUsers: [], singleUser: {}, currentUserCharacters: [], weaponCardTypes: [], classCardTypes: [], vehicleCardTypes: []}, action) {
+export default function usersReducer(state = {loading: false, userID: "", currentUser: {}, topUsers: [], singleUser: {}, currentUserCharacters: [], weaponCardTypes: [], classCardTypes: [], vehicleCardTypes: []}, action) {
   // console.log('getting user state')
   //console.log("this is state", state, "this is action", action)
   let newState;
@@ -32,6 +32,18 @@ export default function usersReducer(state = {loading: false, userID: 3, current
         newState = Object.assign({}, state, {userID: action.user_id} )
         localStorage.setItem("the_key_to_happiness", action.jwt)
         return newState;
+      case 'USER_ID':
+        newState = Object.assign({}, state, {userID: action.payload.user_id})
+        console.log("user id action", action.payload, newState)
+        return newState;
+      case 'CURRENT_USER':
+          newState = Object.assign({}, state, {currentUser: action.payload, loading: false})
+          console.log("fetching current user data:", newState.currentUser)
+        return newState;
+      case 'LOGOUT':
+          localStorage["the_key_to_happiness"] = "null"
+          newState = Object.assign({}, state, {userID: "", currentUser: {}, currentUserCharacters: []})
+          return newState;
     default:
       return state;
   }

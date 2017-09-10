@@ -2,7 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Card, Grid, Image, Button, Table, Icon, Form, Menu } from 'semantic-ui-react';
-import { getSingleUserByID, getUserCharacters } from '../actions/userActions';
+import { getSingleUserByID, getUserCharacters, getCurrentUserDate } from '../actions/userActions';
 import {createCharacter} from '../actions/characterActions';
 import WeaponCardDetail from './weaponCardDetails';
 import VehicleCardDetail from './vehicleCardDetails';
@@ -33,6 +33,18 @@ class CreateCharacter extends React.Component{
     }
   }
 
+  componentDidMount(){
+    if (typeof(this.props.userID) === "number") {
+      this.props.getCurrentUserDate(this.props.userID)
+      }
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (typeof(this.props.userID) === "string" && typeof(nextProps.userID) === "number" ){
+      this.props.getCurrentUserDate(nextProps.userID)
+    }
+  }
+
   handleChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
@@ -60,7 +72,7 @@ class CreateCharacter extends React.Component{
   }
 
   weaponsFilter = (condition) => {
-    let weapons_arr = this.props.singleUser.weapons.filter(weapon => {
+    let weapons_arr = this.props.currentUser.weapons.filter(weapon => {
       let cardType = this.props.weaponCardTypes.find(card => {
         return card.id === weapon.weapon_card_type_id
       })
@@ -106,7 +118,7 @@ class CreateCharacter extends React.Component{
   }
 
   renderVehicles = () => {
-    let orderedByKills = this.props.singleUser.vehicles.sort((a,b) => {
+    let orderedByKills = this.props.currentUser.vehicles.sort((a,b) => {
       return b.kills - a.kills
     })
     let filteredVehicles = orderedByKills.filter(vehicle => {
@@ -118,7 +130,7 @@ class CreateCharacter extends React.Component{
   }
 
   renderClasses = () => {
-    let orderedByKills = this.props.singleUser.classes.sort((a,b) => {
+    let orderedByKills = this.props.currentUser.classes.sort((a,b) => {
       return b.score - a.score
     })
     let filteredClasses = orderedByKills.filter(classCard => {
@@ -182,13 +194,31 @@ class CreateCharacter extends React.Component{
     )
   }
 
+  shouldRender = () => {
+    if (this.props.currentUser.weapons) {
+      return this.whatToRender()
+    } else {
+      return null
+    }
+  };
+
 
   render(){
     console.log("in the char state", this.state, this.props)
     return (
       <div>
         {this.headerButtons()}
-        {this.whatToRender()}
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={5}>
+            <h2> Your Character </h2>
+              <Image src='https://data3.origin.com/content/dam/originx/web/app/games/battlefield/battlefield-1/bf1_pdp_keyart_3840x2160_en_ww_standardedition_v1.jpg.jpg' />
+            </Grid.Column>
+            <Grid.Column width={8}>
+              {this.shouldRender()}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </div>
     )
   }
@@ -213,8 +243,8 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
    getSingleUserByID : getSingleUserByID,
    getUserCharacters: getUserCharacters,
-   createCharacter : createCharacter
-
+   createCharacter : createCharacter,
+   getCurrentUserDate: getCurrentUserDate
  }, dispatch);
 }
 
