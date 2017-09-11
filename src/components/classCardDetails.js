@@ -22,7 +22,7 @@ class ClassCardDetails extends React.Component{
     let time_played = Math.round(card.time_played / 60)
     // debugger
     return (
-      <Card onClick={this.props.onClick} data-name={this.props.name} id={this.props.id}>
+      <Card onClick={this.props.onClick} data-name={this.props.name} id={this.props.id} data-type-name={this.props.typeName} data-type={this.props.typeID}>
         <Image src={cardType.image} />
           <Card.Content>
             <Card.Header>{cardType.name}</Card.Header>

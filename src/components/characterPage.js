@@ -82,7 +82,6 @@ class CharacterPage extends React.Component{
 
 
   renderCharacters = () => {
-    // if (this.props.currentUserCharacters.characters) {
       let charactersJSX = this.createBasicCharacterCards()
       return (
         <Grid>
@@ -97,15 +96,18 @@ class CharacterPage extends React.Component{
               {charactersJSX[2]}
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row columns={2}>
-          <Grid.Column>
-            {charactersJSX[3]}
-          </Grid.Column>
+          <Grid.Row columns={4}>
             <Grid.Column>
-              <Image src='/assets/images/wireframe/image.png' />
+              {charactersJSX[3]}
             </Grid.Column>
             <Grid.Column>
-              <Image src='/assets/images/wireframe/image.png' />
+              {charactersJSX[4]}
+            </Grid.Column>
+            <Grid.Column>
+              {charactersJSX[5]}
+            </Grid.Column>
+            <Grid.Column>
+              {charactersJSX[6]}
             </Grid.Column>
           </Grid.Row>
         </Grid>

@@ -38,11 +38,55 @@ class CharacterDetail extends React.Component{
       })
     }
 
+    goToEditPage = (e) => {
+      let id = e.target.id
+      this.props.history.push(`/editCharacter/${id}`)
+    }
+
+    createCharacterInfo = (character) => {
+      var i = 0;
+      var totalKills = 0;
+      var score = 0;
+
+      character.weapons.forEach(weapon => {
+        i++
+        totalKills += weapon[`card${i}`].data.kills
+      })
+      totalKills += character.vehicle_card[0].data.kills;
+      totalKills += character.class_card[0].data.kills;
+      score += character.class_card[0].data.score;
+      // debugger
+    return (
+      <Card>
+        <Image src={character.info[0].avatar !== null ? character.info[0].avatar : character.class_card[0].info.image} />
+        <Card.Content>
+          <Card.Header>
+          {character.info[0].name}
+          </Card.Header>
+          <Card.Meta>
+          </Card.Meta>
+          <Card.Description>
+            <Icon name="trophy" />
+            Score: {score}
+            <br/>
+            Kills: {totalKills}
+          </Card.Description>
+        </Card.Content>
+        <Card.Content extra>
+          <Button onClick={this.goToEditPage} id={character.info[0].id} >
+          Edit Character
+          </Button>
+        </Card.Content>
+      </Card>
+    )
+  }
+
 
   createCharacterCard = () => {
     if (this.props.currentUserCharacters.characters) {
       let currentCharacter = this.findCharacter();
-      let characterJSX = {weapons_jsx: this.getWeapons(currentCharacter), class_jsx: this.getClass(currentCharacter), vehicle_jsx: this.getVehicle(currentCharacter)};
+      // debugger
+      let characterJSX = {characterInfo: this.createCharacterInfo(currentCharacter), weapons_jsx: this.getWeapons(currentCharacter), class_jsx: this.getClass(currentCharacter), vehicle_jsx: this.getVehicle(currentCharacter)};
 
 
       return characterJSX
@@ -77,11 +121,27 @@ class CharacterDetail extends React.Component{
     if (this.createCharacterCard()) {
       jsx = this.createCharacterCard()
       return (
-        <div>
-          {jsx.weapons_jsx}
-          {jsx.class_jsx}
-          {jsx.vehicle_jsx}
-        </div> )
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={4}>
+              <h3> Your Character</h3>
+              {jsx.characterInfo}
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <h3> Class Card</h3>
+              {jsx.class_jsx}
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <h3> Weapon Cards </h3>
+              {jsx.weapons_jsx}
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <h3> Vehicle Card</h3>
+              {jsx.vehicle_jsx}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      )
     } else {
       return null
     }

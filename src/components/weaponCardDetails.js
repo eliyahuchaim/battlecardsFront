@@ -29,7 +29,7 @@ class WeaponCardDetail extends React.Component{
     let weapon = this.props.weaponCard
     // debugger
     return (
-      <Card onClick={this.props.onClick} data-name={this.props.name} id={this.props.id}>
+      <Card onClick={this.props.onClick} data-name={this.props.name} id={this.props.id} data-type={this.props.typeID} data-type-name={this.props.typeName}>
         <Image src={this.state.image} />
           <Card.Content>
             <Card.Header>{cardType.name}</Card.Header>

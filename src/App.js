@@ -17,6 +17,7 @@ import ClassCards from './components/classCards';
 import CreateCharacter from './components/createCharacter';
 import Sessions from './components/sessions'
 import CharacterDetail from './components/characterDetail';
+import EditCharacter from './components/editCharacter';
 
 class App extends Component {
   constructor(props){
@@ -43,6 +44,7 @@ class App extends Component {
           <Sessions />
             <img src={logo} className="App-logo" alt="logo" />
             <Route exact path='/characters/:id' render={ (props) => <CharacterDetail history={props.history} match={props.match}/>} />
+            <Route exact path='/editCharacter/:id' render={ (props) => <EditCharacter history={props.history} match={props.match}/>} />
             <Route exact path='/createcharacter' component={CreateCharacter} />
             <Route exact path='/classcards' component={ClassCards} />
             <Route exact path='/home' component={Home} />

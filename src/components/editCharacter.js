@@ -3,15 +3,16 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Card, Grid, Image, Button, Table, Icon, Form, Menu } from 'semantic-ui-react';
 import { getSingleUserByID, getUserCharacters, getCurrentUserDate } from '../actions/userActions';
-import {createCharacter} from '../actions/characterActions';
+import {updateCharacter, deleteCharacter} from '../actions/characterActions';
 import WeaponCardDetail from './weaponCardDetails';
 import VehicleCardDetail from './vehicleCardDetails';
 import ClassCardDetails from './classCardDetails';
 
-class CreateCharacter extends React.Component{
+class EditCharacter extends React.Component{
   constructor(props){
     super(props)
     this.state = {
+      characterID: this.props.match.params.id,
       user_id: this.props.userID,
       name: "",
       avatar: "",
@@ -36,14 +37,39 @@ class CreateCharacter extends React.Component{
 
   componentDidMount(){
     if (typeof(this.props.userID) === "number") {
-      this.props.getCurrentUserDate(this.props.userID)
+      this.props.getUserCharacters(this.props.userID)
+      .then(resp => {this.props.getCurrentUserDate(this.props.userID)})
+      .then(resp => {this.updateStateWithCharacter()})
       }
   }
 
   componentWillReceiveProps(nextProps){
     if (typeof(this.props.userID) === "string" && typeof(nextProps.userID) === "number" ){
-      this.props.getCurrentUserDate(nextProps.userID)
+      this.props.getUserCharacters(nextProps.userID)
+      .then(resp => {this.props.getCurrentUserDate(this.props.userID)})
+      .then(resp => {this.updateStateWithCharacter()})
     }
+  }
+
+  updateStateWithCharacter = () => {
+    let id = this.props.match.params.id
+    let foundCharacter = this.props.currentUserCharacters.characters.characters.find(character => {
+      return character.info[0].id == id
+    })
+      this.setState({
+        name: foundCharacter.info[0].name,
+        avatar: foundCharacter.info[0].avatar,
+        mainWeaponID: foundCharacter.weapons[0]["card1"].data.id,
+        sidearmID: foundCharacter.weapons[1]["card2"].data.id,
+        meleeID: foundCharacter.weapons[2]["card3"].data.id,
+        vehicleID: foundCharacter.vehicle_card[0].data.id,
+        classID: foundCharacter.class_card[0].data.id,
+        mainWeaponTypeID: foundCharacter.weapons[0]["card1"].info.id,
+        sidearmTypeID: foundCharacter.weapons[1]["card2"].info.id,
+        meleeWeaponTypeID: foundCharacter.weapons[2]["card3"].info.id,
+        vehicleTypeID: foundCharacter.vehicle_card[0].info.id,
+        classTypeID: foundCharacter.class_card[0].info.id
+      })
   }
 
   handleChange = (e) => {
@@ -92,7 +118,7 @@ class CreateCharacter extends React.Component{
   }
 
   renderMainWeapons = () => {
-    let mainWeapons = this.weaponsFilter("cardType.category != 'SIDEARM' && cardType.category != 'GADGET' && cardType.category != 'GRENADE' && cardType.category != 'MELEE' && weapon.character_id == null")
+    let mainWeapons = this.weaponsFilter("cardType.category != 'SIDEARM' && cardType.category != 'GADGET' && cardType.category != 'GRENADE' && cardType.category != 'MELEE' && weapon.character_id === null")
     // console.log(mainWeapons.length)
       return mainWeapons.map((weapon,index ) => {
         return <WeaponCardDetail onClick={this.addCard} id={weapon.id} weaponCard={weapon} name={"mainWeaponID"} typeID={weapon.weapon_card_type_id} typeName={"mainWeaponTypeID"} key={index} />
@@ -100,7 +126,7 @@ class CreateCharacter extends React.Component{
   }
 
   renderSidearms = () => {
-    let sidearms_arr = this.weaponsFilter("cardType.category === 'SIDEARM' || cardType.category === 'GRENADE' && weapon.character_id === null")
+    let sidearms_arr = this.weaponsFilter("cardType.category === 'SIDEARM' || cardType.category === 'GRENADE'")
     // console.log(sidearms_arr.length)
       return sidearms_arr.map((weapon,index ) => {
         return <WeaponCardDetail onClick={this.addCard} typeID={weapon.weapon_card_type_id} name={"sidearmID"} typeName={"sidearmTypeID"} id={weapon.id} weaponCard={weapon} key={index} />
@@ -108,7 +134,7 @@ class CreateCharacter extends React.Component{
   }
 
   renderMeleeWeapons = () => {
-    let melee_arr = this.weaponsFilter("cardType.category === 'MELEE' && weapon.character_id == null")
+    let melee_arr = this.weaponsFilter("cardType.category === 'MELEE'")
     // console.log(melee_arr.length)
       return melee_arr.map((weapon,index ) => {
         return <WeaponCardDetail typeID={weapon.weapon_card_type_id} typeName={"meleeWeaponTypeID"} onClick={this.addCard} name={"meleeID"} id={weapon.id} weaponCard={weapon} key={index} />
@@ -120,7 +146,7 @@ class CreateCharacter extends React.Component{
       return b.kills - a.kills
     })
     let filteredVehicles = orderedByKills.filter(vehicle => {
-      return vehicle.character_id == null
+      return vehicle.character_id === null
     })
     return filteredVehicles.map((vehicle, index) => {
       return <VehicleCardDetail typeID={vehicle.vehicle_card_type_id} typeName={"vehicleTypeID"} id={vehicle.id} onClick={this.addCard} name={"vehicleID"} vehicle={vehicle} key={index} />
@@ -132,7 +158,7 @@ class CreateCharacter extends React.Component{
       return b.score - a.score
     })
     let filteredClasses = orderedByKills.filter(classCard => {
-      return classCard.character_id == null
+      return classCard.character_id === null
     })
     return filteredClasses.map((classCard, index) => {
       return <ClassCardDetails onClick={this.addCard} name={"classID"} id={classCard.id}
@@ -172,8 +198,13 @@ class CreateCharacter extends React.Component{
     }
   }
 
-  createFullCharacter = () => {
-    this.props.createCharacter(this.state)
+  deleteCharacterAction = () => {
+    this.props.deleteCharacter(this.state.user_id, this.state.characterID)
+    this.props.history.push('/characters')
+  }
+
+  updateCharacterAction = () => {
+    this.props.updateCharacter(this.state).then(resp => {this.props.history.push('/characters')})
   }
 
   characterCard = () => {
@@ -226,7 +257,7 @@ class CreateCharacter extends React.Component{
 
     return (
       <Card>
-        <Image src={ this.state.avatar.length > 2 ? this.state.avatar : 'https://data2.origin.com/content/dam/originx/web/app/games/battlefield/battlefield-1/bf1_pdp_keyart_3840x2160_en_ww_standardedition_v1.jpg.jpg' }/>
+        <Image src={ this.state.avatar !== null ? this.state.avatar : 'https://data2.origin.com/content/dam/originx/web/app/games/battlefield/battlefield-1/bf1_pdp_keyart_3840x2160_en_ww_standardedition_v1.jpg.jpg' }/>
         <Card.Content>
           <Card.Header>
           {this.state.name}
@@ -252,6 +283,9 @@ class CreateCharacter extends React.Component{
         <br/>
         Melee Weapon: {meleeWeaponName}
         </Card.Content>
+        <Button onClick={this.deleteCharacterAction} color="red" >
+          Delete Character
+        </Button>
       </Card>
     )
   }
@@ -266,14 +300,13 @@ class CreateCharacter extends React.Component{
         <Menu.Item name="Add Melee Weapon" data-set="showMelee" onClick={this.changeRenderState}/>
         <Menu.Item name="Add Vehicle Card" data-set="showVehicle" onClick={this.changeRenderState}/>
         <Menu.Item name="Add Class Card" data-set="showClass" onClick={this.changeRenderState}/>
-        <Menu.Item name="Create Character" onClick={this.createFullCharacter}/>
-
+        <Menu.Item color="blue" name="Update Character" onClick={this.updateCharacterAction}/>
       </Menu>
     )
   }
 
   shouldRender = () => {
-    if (this.props.currentUser.weapons) {
+    if (this.props.currentUserCharacters.characters) {
       return this.whatToRender()
     } else {
       return null
@@ -282,6 +315,7 @@ class CreateCharacter extends React.Component{
 
 
   render(){
+    console.log("checking state", this.state, this.props);
     return (
       <div>
         {this.headerButtons()}
@@ -306,6 +340,7 @@ class CreateCharacter extends React.Component{
 const mapStateToProps = (state) => {
   return {
     currentUser: state.user.currentUser,
+    currentUserCharacters: state.user.currentUserCharacters,
     userID: state.user.userID,
     singleUser: state.user.singleUser,
     loading: state.user.loading,
@@ -318,11 +353,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-   getSingleUserByID : getSingleUserByID,
    getUserCharacters: getUserCharacters,
-   createCharacter : createCharacter,
-   getCurrentUserDate: getCurrentUserDate
+   getCurrentUserDate: getCurrentUserDate,
+   updateCharacter: updateCharacter,
+   deleteCharacter: deleteCharacter
  }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateCharacter);
+export default connect(mapStateToProps, mapDispatchToProps)(EditCharacter);
