@@ -69,4 +69,27 @@ export default class UserApi {
     .then(resp => resp.json())
   }
 
+  static getbf1Usernames(){
+    return fetch('http://localhost:3000/api/v1/bf1usernames')
+      .then(resp => resp.json())
+  }
+
+
+  static frontEndFetch(username, platform){
+
+    let payload = {
+      bf1_username: username,
+      platform: platform
+    }
+
+   return fetch(`http://localhost:3000/api/v1/frontenduser/${platform}/${username}`, {
+      headers: {
+        "Accept":"application/json",
+        "Content-Type":"application/json"
+      },
+      method: 'GET'
+    })
+    .then(resp => resp.json())
+  }
+
 }; //end of class

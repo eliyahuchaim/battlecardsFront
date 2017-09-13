@@ -1,7 +1,7 @@
 import CardTypes from '../actions/cardTypesActions';
 
 
-export default function cardTypesReducer(state = {loading: false, userID: "", currentUser: {}, topUsers: [], singleUser: {}, currentUserCharacters: [], weaponCardTypes: [], classCardTypes: [], vehicleCardTypes: []}, action) {
+export default function cardTypesReducer(state = {loading: false, userID: "", currentUser: {}, topUsers: [], singleUser: {}, currentUserCharacters: [], weaponCardTypes: [], classCardTypes: [], vehicleCardTypes: [], frontEndUser: {}, bf1usernames: []}, action) {
 
   let newState;
     switch (action.type) {

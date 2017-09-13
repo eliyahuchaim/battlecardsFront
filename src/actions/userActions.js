@@ -97,3 +97,37 @@ export function logout(){
     })
   }
 }
+
+export function getbf1Usernames(){
+  return dispatch => {
+    return UserApi.getbf1Usernames()
+    .then(resp => {
+      dispatch({
+        type: 'BF1_USERNAMES',
+        payload: resp
+      })
+    })
+  }
+}
+
+export function frontEndUser(data){
+  return dispatch => {
+    dispatch({
+      type: 'FRONT_END_USER',
+      payload: data
+    })
+  }
+}
+
+export function getSecondUsersCharacters(id){
+  return dispatch => {
+    dispatch({type: 'LOADING_CHARACTERS'});
+    return UserApi.getCharacters(id)
+    .then(resp => {
+      dispatch({
+        type: 'GOT_SECOND_USER_CHARACTERS',
+        payload: resp
+      })
+    })
+  }
+}

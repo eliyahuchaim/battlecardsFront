@@ -68,6 +68,13 @@ const NavBar = () => {
               activeStyle={{
               background: '#2a65b2'}}
             >Create Character</NavLink>
+            <NavLink
+              to='/compare'
+              exact
+              style={link}
+              activeStyle={{
+              background: '#2a65b2'}}
+            >Compare</NavLink>
       </div>
     )
   } else {
