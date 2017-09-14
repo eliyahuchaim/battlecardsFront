@@ -46,9 +46,7 @@ class Sessions extends React.Component{
 
   logoutButton = () => {
     return (
-      <Form>
-        <Button onClick={this.logout}>Logout</Button>
-      </Form>
+      <Button color='grey' onClick={this.logout}>Logout</Button>
     )
   }
 

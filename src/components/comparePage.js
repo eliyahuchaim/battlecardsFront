@@ -2,8 +2,13 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { getSingleUserByID, getUserCharacters, getCurrentUserDate } from '../actions/userActions';
-import {Card, Grid, Image, Button, Table, Icon, Label, List } from 'semantic-ui-react';
+import {Card, Grid, Image, Button, Table, Icon, Label, List, Dimmer, Loader } from 'semantic-ui-react';
 import CompareCharacters from './compareCharacters';
+
+
+const avatars = ["https://cdn2.iconfinder.com/data/icons/avatars-vol-1-1/64/avatar-beard-shades-cool-512.png", "https://avatarfiles.alphacoders.com/591/thumb-59122.jpg", "http://memeguy.com/photos/images/if-ron-swanson-was-batman-37493.jpg", "http://steamavatars.co/?media_dl=3494", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlN8YsTY2lSahuu7ZRhWRzwsHsdEav9-5BBA9-IRKwA5JNGO_8", "http://www.avatarys.com/var/albums/Cool-Avatars/Twitter-Avatars/Cool%20Twitter%20Avatar%20Chibi%20ninja%20black%20suit.jpg?m=1435520534", "https://avatarfiles.alphacoders.com/839/83908.jpg", "http://steamavatars.co/?media_dl=218"]
+
+
 
 class ComparePage extends React.Component{
   constructor(props){
@@ -48,6 +53,11 @@ class ComparePage extends React.Component{
     }
   }
 
+  getRandomAvatar = () => {
+    let number = Math.floor(Math.random() * 8)
+    return avatars[number]
+  }
+
 
   renderFronEndUser = () => {
     let currentUser = this.props.currentUser.user
@@ -80,7 +90,7 @@ class ComparePage extends React.Component{
           </Card>
         </Grid.Column>
         <Grid.Column width={6}>
-        <Table basic>
+        <Table>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell></Table.HeaderCell>
@@ -179,7 +189,7 @@ class ComparePage extends React.Component{
         </Grid.Column>
         <Grid.Column width={3}>
           <Card>
-            <Image src= 'https://avatarfiles.alphacoders.com/839/83908.jpg' />
+            <Image src={this.getRandomAvatar()} />
               <Card.Content>
                 <Card.Header>
                 {this.props.frontEndUser.username}
@@ -244,7 +254,7 @@ class ComparePage extends React.Component{
           </Card>
         </Grid.Column>
         <Grid.Column width={6}>
-        <Table basic>
+        <Table>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell></Table.HeaderCell>
@@ -343,7 +353,7 @@ class ComparePage extends React.Component{
         </Grid.Column>
         <Grid.Column width={3}>
           <Card>
-            <Image src= 'https://avatarfiles.alphacoders.com/839/83908.jpg' />
+            <Image src={this.getRandomAvatar()} />
               <Card.Content>
                 <Card.Header>
                 {singleUser.bf1_username}
@@ -367,7 +377,13 @@ class ComparePage extends React.Component{
       </Grid>
     )
     } else {
-      return null
+      return (
+        <div>
+        <Dimmer active inverted>
+        <Loader inverted>Loading</Loader>
+        </Dimmer>
+        </div>
+      )
     }
   }
 

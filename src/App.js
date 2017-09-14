@@ -22,6 +22,7 @@ import CompareForm from './components/compareSearch';
 import PublicUserPage from './components/publicUserPage';
 import ComparePage from './components/comparePage';
 import CompareCharacters from './components/compareCharacters';
+import { Image, Divider } from 'semantic-ui-react'
 
 class App extends Component {
   constructor(props){
@@ -41,14 +42,15 @@ class App extends Component {
 
 
   render() {
-    // console.log("app state", this.props)
     return (
       <Router>
         <div className="App">
+        <div>
           <NavBar />
-          <Sessions />
-            <img src={logo} className="App-logo" alt="logo" />
-
+        </div>
+        <div className="mask"></div>
+            <Image src={'battlecards1white.svg'} className="Logo" size="medium" alt="logo" />
+            <Divider hidden section />
             <Route exact path='/characters/:id' render={ (props) => <CharacterDetail history={props.history} match={props.match}/>} />
             <Route exact path='/editCharacter/:id' render={ (props) => <EditCharacter history={props.history} match={props.match}/>} />
             <Route exact path='/createcharacter' component={CreateCharacter} />

@@ -135,7 +135,6 @@ class WeaponCards extends React.Component{
 
 
   render(){
-    console.log("in weapons card", this.props)
     return(
       <div>
         <Button onClick={this.changeFilter} id="topTen">

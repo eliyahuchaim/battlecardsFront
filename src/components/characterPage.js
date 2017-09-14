@@ -3,8 +3,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {getUserCharacters} from '../actions/userActions';
 import characterDetail from './characterDetail';
-import {Card, Grid, Image, Button, Table, Icon } from 'semantic-ui-react';
+import {Card, Grid, Image, Button, Table, Icon, Loader, Dimmer, Segment } from 'semantic-ui-react';
 import { Route, Redirect} from 'react-router';
+import '../pacman.scss';
 
 
 class CharacterPage extends React.Component{
@@ -45,8 +46,9 @@ class CharacterPage extends React.Component{
         (card[`card${i}`]["data"].kills !== null) ? totalKills += card[`card${i}`]["data"].kills : totalKills +=0
       })
       return (
+        <Grid.Column>
         <Card>
-          <Image src={character.class_card[0].info.image} />
+          <Image src={character.info[0].avatar != null ? character.info[0].avatar : character.class_card[0].info.image} />
           <Card.Content>
             <Card.Header>
             {character.info[0].name}
@@ -71,6 +73,7 @@ class CharacterPage extends React.Component{
             </Button>
           </Card.Content>
         </Card>
+        </Grid.Column>
       )
     })
     return characters
@@ -84,31 +87,17 @@ class CharacterPage extends React.Component{
   renderCharacters = () => {
       let charactersJSX = this.createBasicCharacterCards()
       return (
-        <Grid>
+        <Grid centered={true} className="">
           <Grid.Row columns={3}>
-            <Grid.Column>
               {charactersJSX[0]}
-            </Grid.Column>
-            <Grid.Column>
               {charactersJSX[1]}
-            </Grid.Column>
-            <Grid.Column>
               {charactersJSX[2]}
-            </Grid.Column>
           </Grid.Row>
           <Grid.Row columns={4}>
-            <Grid.Column>
               {charactersJSX[3]}
-            </Grid.Column>
-            <Grid.Column>
               {charactersJSX[4]}
-            </Grid.Column>
-            <Grid.Column>
               {charactersJSX[5]}
-            </Grid.Column>
-            <Grid.Column>
               {charactersJSX[6]}
-            </Grid.Column>
           </Grid.Row>
         </Grid>
       )
@@ -118,7 +107,13 @@ class CharacterPage extends React.Component{
     if (this.props.currentUserCharacters.characters && this.state.showDetails === false) {
       return this.renderCharacters()
     } else {
-      return null
+      return (
+        <div>
+        <Dimmer active inverted>
+        <Loader inverted>Loading</Loader>
+        </Dimmer>
+        </div>
+      )
     }
   }
 

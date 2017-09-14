@@ -260,7 +260,7 @@ class CreateCharacter extends React.Component{
   headerButtons = () => {
     return (
       <Menu>
-        <Menu.Item name="Name Your Character" data-set="showForm" onClick={this.changeRenderState}/>
+        <Menu.Item name="Name Your Character" data-set="showForm"  onClick={this.changeRenderState}/>
         <Menu.Item name="Add Main Weapon" data-set="showMainWeapon" onClick={this.changeRenderState}/>
         <Menu.Item name="Add Sidearm Weapon" data-set="showSidearm" onClick={this.changeRenderState}/>
         <Menu.Item name="Add Melee Weapon" data-set="showMelee" onClick={this.changeRenderState}/>

@@ -1,5 +1,30 @@
+body {
+  background-image: url("https://wallpapersite.com/images/wallpapers/battlefield-1-1920x1080-ultimate-edition-xbox-one-ps4-hd-2165.jpg")!important;
+  background-repeat: no-repeat;
+}
+
+div.mask {
+  background-color: black;
+  opacity: .3;
+  height: 100%;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: -1;
+}
+
+div.value {
+  color: white !important;
+}
+
+div.label {
+  color: white !important;
+}
+
 .App {
   text-align: center;
+  min-height: 100vh;
 }
 
 .App-logo {
@@ -7,11 +32,18 @@
   height: 80px;
 }
 
+.Logo {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 100px;
+    margin-left: 580px;
+}
+
 .App-header {
-  background-color: #222;
+  background-color: #324;
   height: 150px;
   padding: 20px;
-  color: white;
+  color: red;
 }
 
 .App-intro {
@@ -21,4 +53,39 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.user-page {
+
+  height: 500px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+
+.Home-page {
+  background-image: url("https://wallpapersite.com/images/wallpapers/battlefield-1-1920x1080-ultimate-edition-xbox-one-ps4-hd-2165.jpg");
+  min-height: 90vh;
+}
+
+.Logout-button {
+    position: absolute;
+    right: 50px;
+    top: 20px;
+    max-width: 100%;
+    color: transparent;
+}
+
+.card-flex {
+  flex-wrap: wrap;
+}
+
+.weapon-card {
+  background-color: black !important;
+}
+
+.center-cards {
+  width: 84.5% !important;
+  margin: 0 auto !important;
 }

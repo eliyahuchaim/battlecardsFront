@@ -25,7 +25,7 @@ export default class UserApi {
   }
 
   static seedTopUsers(){
-    return fetch('http://localhost:3000/api/v1/users')
+    return fetch('http://localhost:3000/api/v1/topusers')
     .then(resp => resp.json())
   }
 

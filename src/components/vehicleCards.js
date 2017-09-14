@@ -25,23 +25,27 @@ class VehicleCards extends React.Component{
 
 
   orderByKills = () => {
-    let vehicles_jsx = this.renderAllVehicles();
-      return vehicles_jsx.sort((a,b) => {
+      return this.props.currentUser.vehicles.sort((a,b) => {
         return b.kills - a.kills
     })
   }
 
   renderAllVehicles = () => {
-    return this.props.currentUser.vehicles.map((vehicle,index) => {
+    let orderedVehicles = this.orderByKills()
+    return orderedVehicles.map((vehicle,index) => {
       return <VehicleCardDetail vehicle={vehicle} key={index} />
     })
   }
 
   shouldRender = () => {
     if (this.props.currentUser.vehicles) {
-      return this.orderByKills()
+      return this.renderAllVehicles()
     } else {
-      return null
+      return (
+          <div class="ui active dimmer">
+            <div class="ui text loader">Loading</div>
+          </div>
+      )
     }
   }
 

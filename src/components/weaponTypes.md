@@ -30,3 +30,16 @@ Types
 
     Melee
       MELEE
+
+
+
+      Vehicle types:
+
+      Plane
+      train
+      gun
+      cannon
+      horse
+      airship
+      heavy tank
+      landship
