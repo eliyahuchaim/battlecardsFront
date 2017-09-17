@@ -25,7 +25,7 @@ class CompareCharacters extends React.Component{
       })
       return (
         <Card>
-          <Image src={character.class_card[0].info.image} />
+          <Image src={character.info[0].avatar} />
           <Card.Content>
             <Card.Header>
             {character.info[0].name}
