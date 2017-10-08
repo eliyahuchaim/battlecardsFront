@@ -131,3 +131,30 @@ export function getSecondUsersCharacters(id){
     })
   }
 }
+
+export function updateCurrentUser(id) {
+  return dispatch => {
+    dispatch({type: 'LOADING_USER'});
+    return UserApi.updateCurrentUser(id)
+    .then(resp => {
+      dispatch({
+        type: 'CURRENT_USER',
+        payload: resp
+      })
+    })
+  }
+}
+
+
+export function updateSingleUser(id) {
+  return dispatch => {
+    dispatch({type: 'LOADING_USER'});
+    return UserApi.updateUser(id)
+    .then(resp => {
+      dispatch({
+        type: 'SINGLE_USER',
+        payload: resp
+      })
+    })
+  }
+}

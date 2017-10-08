@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getSingleUserByID, getUserCharacters, getCurrentUserDate } from '../actions/userActions';
+import { getSingleUserByID, getUserCharacters, getCurrentUserDate, updateCurrentUser } from '../actions/userActions';
 import {Card, Grid, Image, Button, Table, Icon, Statistic, Loader, Dimmer } from 'semantic-ui-react';
 
 class UserPage extends React.Component{
@@ -19,6 +19,10 @@ class UserPage extends React.Component{
     if (typeof(this.props.userID) === "string" && typeof(nextProps.userID) === "number" ){
       this.props.getCurrentUserDate(nextProps.userID)
     }
+  }
+
+  updateUser = () => {
+    this.props.updateCurrentUser(this.props.userID)
   }
 
 
@@ -54,6 +58,9 @@ class UserPage extends React.Component{
                 </Card.Description>
               </Card.Content>
               <Card.Content extra>
+                <Button onClick={this.updateUser} >
+                Update
+                </Button>
               </Card.Content>
             </Card>
             </Grid.Column>
@@ -226,7 +233,8 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
    getSingleUserByID : getSingleUserByID,
    getUserCharacters: getUserCharacters,
-   getCurrentUserDate: getCurrentUserDate
+   getCurrentUserDate: getCurrentUserDate,
+   updateCurrentUser: updateCurrentUser
  }, dispatch);
 }
 

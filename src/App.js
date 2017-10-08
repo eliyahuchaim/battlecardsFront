@@ -30,7 +30,7 @@ class App extends Component {
   }
 
   componentWillMount(){
-    if (localStorage.the_key_to_happiness !== "null") {console.log("local storage exists"), this.props.getUserId()}
+    if (localStorage.the_key_to_happiness !== "null" && localStorage.the_key_to_happiness!== "undefined") {console.log("local storage exists"), this.props.getUserId()}
   }
 
   componentDidMount(){

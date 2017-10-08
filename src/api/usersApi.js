@@ -92,4 +92,15 @@ export default class UserApi {
     .then(resp => resp.json())
   }
 
+  static updateCurrentUser(id){
+    return fetch(`http://localhost:3000/api/v1/users/${id}`, {
+      headers: {
+        "Accept":"application/json",
+        "Content-Type":"application/json"
+      },
+      method: 'PATCH'
+    })
+    .then(resp => resp.json())
+  }
+
 }; //end of class
